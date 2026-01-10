@@ -73,10 +73,9 @@ if st.button("Predict Price"):
 
 
         st.subheader("🔝 Top 3 Recommended 5G Phones")
-
     rec = data.sort_values(by='Price', ascending=True).head(3)
-
     st.table(rec[['Brand', 'RAM', 'Storage', 'Camera', 'Price']])
+
 
 
 
