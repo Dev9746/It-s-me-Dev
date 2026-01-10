@@ -17,6 +17,27 @@ if not os.path.exists("phones_5g.csv"):
 # ---- LOAD FILES ----
 model = joblib.load("price_model.pkl")
 data = pd.read_csv("phones_5g.csv")
+# ================= FIX START =================
+
+# Clean all column names
+data.columns = data.columns.str.strip().str.lower()
+
+# Automatically find price column
+price_col = None
+for col in data.columns:
+    if 'price' in col or 'cost' in col or 'amount' in col:
+        price_col = col
+        break
+
+if price_col is None:
+    st.error("❌ Price column not found in dataset")
+    st.stop()
+
+# Rename found column to standard name
+data.rename(columns={price_col: 'Price'}, inplace=True)
+
+# ================= FIX END =================
+
 # 🔧 CLEAN COLUMN NAMES COMPLETELY
 data.columns = (
     data.columns
@@ -50,9 +71,14 @@ if st.button("Predict Price"):
     price = model.predict([[ram, storage, battery, camera, processor]])
     st.success(f"Predicted Price: ₹{int(price[0])}")
 
-    st.subheader("🔝 Top 3 Recommended 5G Phones")
-    rec = data.sort_values(by=data['Price']).head(3)
+
+        st.subheader("🔝 Top 3 Recommended 5G Phones")
+
+    rec = data.sort_values(by='Price', ascending=True).head(3)
+
     st.table(rec[['Brand', 'RAM', 'Storage', 'Camera', 'Price']])
+
+
 
 
 
