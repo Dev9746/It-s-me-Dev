@@ -35,6 +35,15 @@ if price_col is None:
 
 # rename to standard name
 data.rename(columns={price_col: "price"}, inplace=True)
+# 🔧 CONVERT PRICE TO NUMBER (CRITICAL FIX)
+data["price"] = (
+    data["price"]
+    .astype(str)
+    .str.replace("₹", "", regex=False)
+    .str.replace(",", "", regex=False)
+    .astype(float)
+)
+
 
 st.success("✅ Model & Dataset Loaded Successfully")
 st.write("Price Range: ₹20,000 – ₹30,000")
@@ -71,3 +80,4 @@ if st.button("Predict Price"):
             ["brand", "ram", "storage", "camera", "price"]
         ]
     )
+
