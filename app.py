@@ -17,6 +17,17 @@ if not os.path.exists("phones_5g.csv"):
 # ---- LOAD FILES ----
 model = joblib.load("price_model.pkl")
 data = pd.read_csv("phones_5g.csv")
+# 🔧 CLEAN COLUMN NAMES COMPLETELY
+data.columns = (
+    data.columns
+    .str.strip()        # remove spaces
+    .str.lower()        # convert to lowercase
+)
+
+# 🔧 FORCE PRICE COLUMN NAME
+if 'price' in data.columns:
+    data.rename(columns={'price': 'Price'}, inplace=True)
+
 # 🔹 COLUMN CLEANING (VERY IMPORTANT)
 data.columns = data.columns.str.strip()
 
@@ -40,6 +51,8 @@ if st.button("Predict Price"):
     st.success(f"Predicted Price: ₹{int(price[0])}")
 
     st.subheader("🔝 Top 3 Recommended 5G Phones")
-    rec = data.sort_values(by="Price").head(3)
-    st.table(rec[['Brand','RAM','Storage','Camera','Price']])
+    rec = data.sort_values(by=data['Price']).head(3)
+    st.table(rec[['Brand', 'RAM', 'Storage', 'Camera', 'Price']])
+
+
 
