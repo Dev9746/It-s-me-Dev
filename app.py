@@ -71,10 +71,11 @@ if st.button("Predict Price"):
     price = model.predict([[ram, storage, battery, camera, processor]])
     st.success(f"Predicted Price: ₹{int(price[0])}")
 
+    st.subheader("🔝 Top 3 Recommended 5G Phones")
 
-        st.subheader("🔝 Top 3 Recommended 5G Phones")
     rec = data.sort_values(by='Price', ascending=True).head(3)
     st.table(rec[['Brand', 'RAM', 'Storage', 'Camera', 'Price']])
+
 
 
 
