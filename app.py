@@ -17,7 +17,11 @@ if not os.path.exists("phones_5g.csv"):
 
 # ---------------- LOAD FILES ----------------
 model = joblib.load("price_model.pkl")
-data = pd.read_csv("phones_5g.csv")
+data = pd.read_csv("phones_5g.csv", quotechar='"')
+data = data.iloc[:, 0].str.split(",", expand=True)
+data.columns = ["Brand","RAM","Storage","Battery","Camera","Processor_Score","Price"]
+
+st.write("Dataset columns:", list(data.columns))
 
 # ---------------- CLEAN COLUMN NAMES ----------------
 data.columns = data.columns.str.strip()
@@ -76,10 +80,14 @@ if st.button("Predict Price"):
         .head(3)
     )
 
-    st.table(
-        recommended[
-            ["Brand", "RAM", "Storage", "Camera", "price"]
-        ]
-    )
+    # columns that we WANT to show
+show_cols = ["Brand", "RAM", "Storage", "Camera", "price"]
+
+# keep only columns that actually exist in dataset
+final_cols = [c for c in show_cols if c in recommended.columns]
+
+st.table(recommended[final_cols])
+
+
 
 
