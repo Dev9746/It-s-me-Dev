@@ -41,8 +41,14 @@ data["price"] = (
     .astype(str)
     .str.replace("₹", "", regex=False)
     .str.replace(",", "", regex=False)
-    .astype(float)
 )
+
+# convert safely to number
+data["price"] = pd.to_numeric(data["price"], errors="coerce")
+
+# drop rows where price is missing
+data = data.dropna(subset=["price"])
+
 
 
 st.success("✅ Model & Dataset Loaded Successfully")
@@ -65,19 +71,21 @@ if st.button("Predict Price"):
 
     # ------------------ TOP 3 RECOMMENDATION ------------------
     st.subheader("🔝 Top 3 Recommended 5G Phones")
-
     recommended = (
-        data[
-            (data["price"] >= 20000) &
-            (data["price"] <= 30000)
-        ]
-        .sort_values(by="price")
-        .head(3)
-    )
+    data[
+        (data["price"] >= 20000) &
+        (data["price"] <= 30000)
+    ]
+    .sort_values(by="price")
+    .head(3)
+)
+
+    
 
     st.table(
         recommended[
             ["brand", "ram", "storage", "camera", "price"]
         ]
     )
+
 
