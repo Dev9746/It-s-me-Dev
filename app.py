@@ -79,6 +79,8 @@ if st.button("Predict Price"):
         .sort_values(by="price")
         .head(3)
     )
+    show_cols = ["Brand", "RAM", "Storage", "Camera", "price"]
+final_cols = [c for c in show_cols if c in recommended.columns]
 
     # columns that we WANT to show
 show_cols = ["Brand", "RAM", "Storage", "Camera", "price"]
@@ -87,6 +89,7 @@ show_cols = ["Brand", "RAM", "Storage", "Camera", "price"]
 final_cols = [c for c in show_cols if c in recommended.columns]
 
 st.table(recommended[final_cols])
+
 
 
 
