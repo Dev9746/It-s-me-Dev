@@ -68,7 +68,6 @@ if st.button("Predict Price"):
     )
     st.success(f"Predicted Price: ₹{int(predicted_price[0])}")
 
-    # ---------------- TOP 3 RECOMMENDED ----------------
     st.subheader("🔝 Top 3 Recommended 5G Phones")
 
     recommended = (
@@ -79,16 +78,11 @@ if st.button("Predict Price"):
         .sort_values(by="price")
         .head(3)
     )
+
     show_cols = ["Brand", "RAM", "Storage", "Camera", "price"]
-final_cols = [c for c in show_cols if c in recommended.columns]
+    final_cols = [c for c in show_cols if c in recommended.columns]
 
-    # columns that we WANT to show
-show_cols = ["Brand", "RAM", "Storage", "Camera", "price"]
-
-# keep only columns that actually exist in dataset
-final_cols = [c for c in show_cols if c in recommended.columns]
-
-st.table(recommended[final_cols])
+    st.table(recommended[final_cols])
 
 
 
